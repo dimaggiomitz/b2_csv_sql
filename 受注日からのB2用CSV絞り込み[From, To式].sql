@@ -9,7 +9,7 @@ NULL AS 'お届け先コード',
 shipping_tel01 || '-' || shipping_tel02 || '-' || shipping_tel03 AS 'お届け先電話番号',
 NULL AS 'お届け先電話番号枝番',
 shipping_zip01 || '-' || shipping_zip02 AS 'お届け先郵便番号',
-(case when CHARACTER_LENGTH(shipping_addr03) > 0 then concat(substring((SELECT mtb_pref.name FROM mtb_pref INNER JOIN dtb_order ON mtb_pref.id = dtb_order.order_pref WHERE dtb_shipping.order_id = dtb_order.order_id) || shipping_addr01 from 1 for 50),' ',shipping_addr02,' ',shipping_addr03) else substring((SELECT mtb_pref.name FROM mtb_pref INNER JOIN dtb_order ON mtb_pref.id = dtb_order.order_pref WHERE dtb_shipping.order_id = dtb_order.order_id) || shipping_addr01 || shipping_addr02 from 1 for 50) end) AS 'お届け先住所',
+(case when CHARACTER_LENGTH(shipping_addr03) > 0 then concat(substring((SELECT mtb_pref.name FROM mtb_pref INNER JOIN dtb_shipping ON mtb_pref.id = dtb_shipping.shipping_pref WHERE dtb_shipping.order_id = dtb_order.order_id) || shipping_addr01 from 1 for 50),' ',shipping_addr02,' ',shipping_addr03) else substring((SELECT mtb_pref.name FROM mtb_pref INNER JOIN dtb_shipping ON mtb_pref.id = dtb_shipping .shipping_pref WHERE dtb_shipping.order_id = dtb_order.order_id) || shipping_addr01 || shipping_addr02 from 1 for 50) end) AS 'お届け先住所',
 ('') AS 'お届け先住所(アパートマンション名)',
 NULL AS 'お届け先会社・部門名1',
 NULL AS 'お届け先会社・部門名2',
@@ -87,7 +87,7 @@ FROM dtb_order,dtb_order_detail,dtb_shipping, dtb_products, dtb_products_class
 WHERE dtb_order.order_id = dtb_order_detail.order_id 
 AND dtb_order.order_id = dtb_shipping.order_id 
 AND dtb_order.del_flg != 1 
-AND dtb_order_detail.product_class_id = dtb_products_class.product_class_id 
+AND dtb_order_detail.product_class_id = dtb_products_class.product_class_id
 AND dtb_products.product_id = dtb_products_class.product_id 
 AND dtb_order.create_date >= '2015-06-29 00:00:00' 
 AND dtb_order.create_date <= '2015-07-01 23:59:59'
